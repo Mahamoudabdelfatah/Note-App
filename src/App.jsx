@@ -8,7 +8,7 @@ import Note from './Components/Note/Note'
 import NotFound from './Components/NotFound/NotFound'
 
 
-let x = createBrowserRouter([
+let route = createBrowserRouter([
   {
     path: "", element: <Layout />, children: [
       { index: true, element: <Home /> },
@@ -25,7 +25,7 @@ let x = createBrowserRouter([
 function App() {
   return (
     <>
-      <RouterProvider router={x}></RouterProvider>
+      <RouterProvider router={route}></RouterProvider>
     </>
   )
 }
