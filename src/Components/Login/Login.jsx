@@ -18,9 +18,12 @@ function Login() {
     setisLoading(true)
     axios.post(`https://note-sigma-black.vercel.app/api/v1/users/signIn`, formValues)
       .then((response) => {
-        if (response.data.msg === "done") {
+        if (response?.data?.msg === "done") {
+          localStorage.setItem("userToken",response?.data?.token)
           navigate("/")
           setisLoading(false)
+          console.log(response);
+          
         }
       })
       .catch((error) => {
@@ -57,12 +60,12 @@ function Login() {
         {/* <div className='w-1/2 py-5 '><img src={img1} className='w-100' /></div> */}
 
 
-        {apiError ? <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-          {apiError}
-        </div> : null}
 
 
         <h2 className='text-3xl font-bold mb-6 text-blue-600'>Login Now</h2>
+        {apiError ? <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+          {apiError}
+        </div> : null}
 
         <form className=" mx-auto" onSubmit={formik.handleSubmit} >
 

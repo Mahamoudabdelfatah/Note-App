@@ -59,12 +59,12 @@ function Register() {
     <>
       <div className='py-5 flex flex-col items-center justify-center'>
         {/* <div className='w-1/2 py-5 '><img src={img1} className='w-100' /></div> */}
-        {apiError ? <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-          {apiError}
-        </div> : null}
 
 
         <h2 className='text-3xl font-bold mb-6 text-blue-600'>Register Now</h2>
+        {apiError ? <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+          {apiError}
+        </div> : null}
 
         <form className=" mx-auto" onSubmit={formik.handleSubmit} >
           {/* Name */}

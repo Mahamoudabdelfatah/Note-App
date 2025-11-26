@@ -1,7 +1,20 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 
 function Navbar() {
+
+
+  let navigate = useNavigate()
+
+  let userToken = localStorage.getItem("userToken") || null
+
+  function logOut() {
+    localStorage.removeItem("userToken")
+    navigate("/login")
+  }
+
+
+
   return (
     <>
 
@@ -24,18 +37,24 @@ function Navbar() {
           <div className="hidden w-full md:block md:w-auto" id="navbar-default">
             <ul className=" bg-[#0D6EFD] font-medium flex flex-col p-4 md:p-0 mt-4  rounded-lg  md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0  ">
 
-              <li>
-                <NavLink className="block py-2 px-3  rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" to="" >Home</NavLink>
-              </li>
-              <li>
-                <NavLink className="block py-2 px-3  rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" to="/register" >Register</NavLink>
-              </li>
-              <li>
-                <NavLink className="block py-2 px-3  rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" to="/login" >Login</NavLink>
-              </li>
-              <li>
-                <button className="block py-2 px-3  rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"  >Logout</button>
-              </li>
+
+
+              {userToken == null ? <>
+
+                <li>
+                  <NavLink className="block py-2 px-3  rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" to="/register" >Register</NavLink>
+                </li>
+                <li>
+                  <NavLink className="block py-2 px-3  rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" to="/login" >Login</NavLink>
+                </li>
+              </> : <>
+                <li>
+                  <NavLink className="block py-2 px-3  rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" to="" >Home</NavLink>
+                </li>
+                <li>
+                  <button onClick={logOut} className="block py-2 px-3  rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"  >Logout</button>
+                </li>
+              </>}
               <li>
               </li>
             </ul>
