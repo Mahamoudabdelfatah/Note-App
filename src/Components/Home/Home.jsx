@@ -1,8 +1,12 @@
 import axios from 'axios';
 import { useFormik } from 'formik';
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FaPlus } from "react-icons/fa";
 import * as Yup from "yup";
+import { LiaEditSolid } from "react-icons/lia";
+import { FaTrashAlt } from "react-icons/fa";
+
+
 
 
 
@@ -10,6 +14,8 @@ function Home() {
 
   // const [show, setShow] = useState(false);
   // const handleClose = () => setShow(false)
+
+  const [notes, setNotes] = useState([])
 
   async function addNote(formValues) {
     await axios.post(`https://note-sigma-black.vercel.app/api/v1/notes`, formValues, {
@@ -19,9 +25,9 @@ function Home() {
     })
       .then((response) => {
         if (response?.data?.msg === "done") {
-          // handleClose()
           formValues.title = ""
           formValues.content = ""
+          getNotes()
 
         }
         console.log(response);
@@ -31,8 +37,30 @@ function Home() {
         console.log(error);
 
       })
+      .finally(() => {
+        // handleClose()
+
+      })
     console.log(formValues);
 
+  }
+
+
+  async function getNotes() {
+    await axios.get(`https://note-sigma-black.vercel.app/api/v1/notes`, {
+      headers: {
+        token: `3b8ny__${localStorage.getItem("userToken")}`
+      }
+    })
+      .then((response) => {
+        console.log(response?.data?.notes);
+        setNotes(response?.data?.notes)
+
+      })
+      .catch((error) => {
+        console.log(error);
+
+      })
   }
 
 
@@ -51,6 +79,10 @@ function Home() {
     onSubmit: addNote,
   })
 
+
+  useEffect(() => {
+    getNotes()
+  }, [])
 
 
   return (
@@ -167,7 +199,36 @@ function Home() {
 
 
       <h2 className='text-3xl mb-4'>Notes</h2>
-      <div className=''></div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+        {/* Single Note Card */}
+        {notes?.map((note, index) =>
+
+          <div key={note._id} className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+
+            <h1 className="text-sm font-bold text-gray-500 dark:text-gray-400">
+              Note Number : {index + 1}
+            </h1>
+
+            <h1 className="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
+              {note?.title}
+            </h1>
+
+            <p className="mb-3 font-normal text-gray-500 dark:text-gray-400">
+              {note?.content}
+            </p>
+
+            <div className="flex text-3xl gap-3 text-blue-600 cursor-pointer">
+              <LiaEditSolid />
+              <FaTrashAlt />
+            </div>
+
+          </div>
+        )}
+
+      </div>
+
 
     </>
   )
