@@ -18,6 +18,12 @@ function Home() {
       }
     })
       .then((response) => {
+        if (response?.data?.msg === "done") {
+          // handleClose()
+          formValues.title = ""
+          formValues.content = ""
+
+        }
         console.log(response);
 
       })
@@ -26,7 +32,6 @@ function Home() {
 
       })
     console.log(formValues);
-    // handleClose()
 
   }
 
