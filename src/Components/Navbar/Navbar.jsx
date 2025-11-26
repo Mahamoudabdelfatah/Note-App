@@ -1,5 +1,9 @@
 import React from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
+import { FaBoxOpen } from "react-icons/fa";
+import { useRecoilState } from 'recoil';
+import { noteAtom } from '../../Atoms/noteAtom';
+
 
 function Navbar() {
 
@@ -12,6 +16,8 @@ function Navbar() {
     localStorage.removeItem("userToken")
     navigate("/login")
   }
+
+  let [notesLength, setNotesLength] = useRecoilState(noteAtom)
 
 
 
@@ -48,6 +54,14 @@ function Navbar() {
                   <NavLink className="block py-2 px-3  rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" to="/login" >Login</NavLink>
                 </li>
               </> : <>
+                <div className="relative w-fit">
+                  <FaBoxOpen className="text-4xl cursor-pointer" />
+
+                  <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                    {notesLength}
+                  </span>
+                </div>
+
                 <li>
                   <NavLink className="block py-2 px-3  rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" to="" >Home</NavLink>
                 </li>

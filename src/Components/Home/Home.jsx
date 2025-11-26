@@ -5,6 +5,8 @@ import { FaPlus } from "react-icons/fa";
 import * as Yup from "yup";
 import { LiaEditSolid } from "react-icons/lia";
 import { FaTrashAlt } from "react-icons/fa";
+import { useRecoilState } from 'recoil';
+import { noteAtom } from '../../Atoms/noteAtom';
 
 
 
@@ -12,10 +14,11 @@ import { FaTrashAlt } from "react-icons/fa";
 
 function Home() {
 
-  // const [show, setShow] = useState(false);
-  // const handleClose = () => setShow(false)
+  const [noteLength, setNoteLength] = useRecoilState(noteAtom)
 
   const [notes, setNotes] = useState([])
+
+  const [noteError, setNoteError] = useState("")
 
   async function addNote(formValues) {
     await axios.post(`https://note-sigma-black.vercel.app/api/v1/notes`, formValues, {
@@ -47,6 +50,7 @@ function Home() {
 
 
   async function getNotes() {
+    setNoteError(null)
     await axios.get(`https://note-sigma-black.vercel.app/api/v1/notes`, {
       headers: {
         token: `3b8ny__${localStorage.getItem("userToken")}`
@@ -55,6 +59,27 @@ function Home() {
       .then((response) => {
         console.log(response?.data?.notes);
         setNotes(response?.data?.notes)
+        setNoteLength(response?.data?.notes.length)
+
+      })
+      .catch((error) => {
+        console.log(error);
+        setNoteError(error?.response?.data?.msg)
+        setNoteLength(0)
+
+      })
+  }
+
+
+  async function deleteNote(noteID) {
+    await axios.delete(`https://note-sigma-black.vercel.app/api/v1/notes/${noteID}`, {
+      headers: {
+        token: `3b8ny__${localStorage.getItem("userToken")}`
+      }
+    })
+      .then((response) => {
+        console.log(response);
+        getNotes()
 
       })
       .catch((error) => {
@@ -198,36 +223,42 @@ function Home() {
 
 
 
-      <h2 className='text-3xl mb-4'>Notes</h2>
+      {noteError ? <h4 className='text-4xl text-blue-600 font-bold'>{noteError}</h4> : <>
+        <h2 className='text-3xl mb-4'>Notes</h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 
-        {/* Single Note Card */}
-        {notes?.map((note, index) =>
+          {/* Single Note Card */}
+          {notes?.map((note, index) =>
 
-          <div key={note._id} className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+            <div key={note._id} className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
 
-            <h1 className="text-sm font-bold text-gray-500 dark:text-gray-400">
-              Note Number : {index + 1}
-            </h1>
+              <h1 className="text-sm font-bold text-gray-500 dark:text-gray-400">
+                Note Number : {index + 1}
+              </h1>
 
-            <h1 className="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
-              {note?.title}
-            </h1>
+              <h1 className="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
+                {note?.title}
+              </h1>
 
-            <p className="mb-3 font-normal text-gray-500 dark:text-gray-400">
-              {note?.content}
-            </p>
+              <p className="mb-3 font-normal text-gray-500 dark:text-gray-400">
+                {note?.content}
+              </p>
 
-            <div className="flex text-3xl gap-3 text-blue-600 cursor-pointer">
-              <LiaEditSolid />
-              <FaTrashAlt />
+              <div className="flex text-3xl gap-3 text-blue-600 cursor-pointer">
+                <LiaEditSolid />
+                <FaTrashAlt onClick={() => deleteNote(note._id)} />
+              </div>
+
             </div>
+          )}
 
-          </div>
-        )}
 
-      </div>
+        </div>
+        <h1 className='my-3 text-end text-xl font-bold' >Notes Number : {noteLength}</h1>
+
+
+      </>}
 
 
     </>

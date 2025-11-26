@@ -6,6 +6,7 @@ import Login from './Components/Login/Login'
 import Register from './Components/Register/Register'
 import Note from './Components/Note/Note'
 import NotFound from './Components/NotFound/NotFound'
+import { RecoilRoot } from 'recoil'
 
 
 let route = createBrowserRouter([
@@ -25,7 +26,9 @@ let route = createBrowserRouter([
 function App() {
   return (
     <>
-      <RouterProvider router={route}></RouterProvider>
+      <RecoilRoot>
+        <RouterProvider router={route}></RouterProvider>
+      </RecoilRoot>
     </>
   )
 }

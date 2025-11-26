@@ -20,7 +20,8 @@ function Register() {
       .then((response) => {
         console.log(response.msg);
         if (response.data.msg === "done") {
-          navigate("/")
+          // localStorage.setItem("userToken", response?.data?.token)
+          navigate("/login")
           setisLoading(false)
         }
 
